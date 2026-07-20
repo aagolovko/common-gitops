@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-config
+  namespace: cloudflared
+data:
+  config.yaml: |
+    tunnel: b7a43295-6243-4ca0-bd52-d8168d1aac35
+    credentials-file: /etc/cloudflared/creds/credentials.json
+    ingress:
+      - hostname: n8n.agolovko.net
+        service: http://n8n.automation.svc.cluster.local:5678
+      - hostname: schnapper.agolovko.net
+        service: http://schnapper-ui.schnapper.svc.cluster.local:80
+      - hostname: schnapper-ui.agolovko.net
+        service: http://schnapper-ui.schnapper.svc.cluster.local:80
+      - service: http_status:404
+
