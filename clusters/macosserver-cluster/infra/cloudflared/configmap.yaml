@@ -16,4 +16,6 @@ data:
         service: http://schnapper-ui.schnapper.svc.cluster.local:80
       - hostname: schnapper-ui.agolovko.net
         service: http://schnapper-ui.schnapper.svc.cluster.local:80
+      - hostname: poicrafter-ui.agolovko.net
+        service: http://poicrafter-frontend.poicrafter-prod.svc.cluster.local:80
       - service: http_status:404
