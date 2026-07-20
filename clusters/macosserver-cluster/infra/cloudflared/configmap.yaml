@@ -3,6 +3,8 @@ kind: ConfigMap
 metadata:
   name: cloudflared-config
   namespace: cloudflared
+  annotations:
+    kustomize.toolkit.fluxcd.io/prune: disabled
 data:
   config.yaml: |
     tunnel: b7a43295-6243-4ca0-bd52-d8168d1aac35
@@ -15,4 +17,3 @@ data:
       - hostname: schnapper-ui.agolovko.net
         service: http://schnapper-ui.schnapper.svc.cluster.local:80
       - service: http_status:404
-
