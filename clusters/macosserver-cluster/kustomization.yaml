@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
   - flux-system/poicrafter-gitops-sync.yaml
   - infra/cloudflared
+  - infra/grafana-monitoring
