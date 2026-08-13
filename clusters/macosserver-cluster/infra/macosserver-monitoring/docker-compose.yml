@@ -1,0 +1,13 @@
+services:
+  fritz-exporter:
+    image: pdreker/fritz_exporter:3
+    container_name: fritz-exporter
+    restart: unless-stopped
+    env_file:
+      - /Users/agolovko/.env
+    environment:
+      FRITZ_HOSTNAME: "192.168.178.1"
+      FRITZ_NAME: "Fritz!Box 6660 Cable"
+      FRITZ_USERNAME: "fritz_exporter"
+    ports:
+      - "127.0.0.1:9787:9787"

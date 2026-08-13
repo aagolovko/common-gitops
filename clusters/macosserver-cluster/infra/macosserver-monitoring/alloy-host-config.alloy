@@ -48,6 +48,16 @@ prometheus.scrape "cloudflared" {
   forward_to      = [prometheus.remote_write.grafana.receiver]
 }
 
+prometheus.scrape "fritzbox" {
+  targets = [{
+    "__address__" = "127.0.0.1:9787",
+    "instance"    = "fritzbox-6660",
+    "device"      = "fritzbox",
+  }]
+  job_name        = "integrations/fritzbox"
+  scrape_interval = "60s"
+  forward_to      = [prometheus.remote_write.grafana.receiver]
+}
 
 prometheus.remote_write "grafana" {
   endpoint {
