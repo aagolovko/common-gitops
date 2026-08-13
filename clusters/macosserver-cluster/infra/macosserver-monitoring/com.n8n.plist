@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>HOME</key>
+		<string>/Users/agolovko</string>
+		<key>N8N_PROTOCOL</key>
+		<string>https</string>
+		<key>N8N_EDITOR_BASE_URL</key>
+		<string>https://n8n.agolovko.net/</string>
+		<key>WEBHOOK_URL</key>
+		<string>https://n8n.agolovko.net/</string>
+		<key>PATH</key>
+		<string>/Users/agolovko/opt/node-22.23.2/bin:/usr/local/bin:/usr/bin:/bin</string>
+	</dict>
+	<key>KeepAlive</key>
+	<true/>
+	<key>Label</key>
+	<string>com.n8n</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/Users/agolovko/opt/node-22.23.2/bin/node</string>
+		<string>/usr/local/bin/n8n</string>
+		<string>start</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>/Users/agolovko/Library/Logs/n8n-error.log</string>
+	<key>StandardOutPath</key>
+	<string>/Users/agolovko/Library/Logs/n8n.log</string>
+</dict>
+</plist>

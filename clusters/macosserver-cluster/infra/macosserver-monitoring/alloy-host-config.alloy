@@ -1,0 +1,67 @@
+// Native macOS host metrics for macosserver.
+// Credentials are supplied through the launchd wrapper environment.
+
+prometheus.exporter.unix "macosserver" {
+  enable_collectors = [
+    "boottime",
+    "cpu",
+    "diskstats",
+    "filesystem",
+    "loadavg",
+    "meminfo",
+    "netdev",
+    "uname",
+    "textfile",
+  ]
+  textfile {
+    directory = "/Users/agolovko/.local/share/grafana-alloy"
+  }
+}
+
+discovery.relabel "macosserver" {
+  targets = prometheus.exporter.unix.macosserver.targets
+
+  rule {
+    target_label = "instance"
+    replacement  = "macosserver"
+  }
+
+  rule {
+    target_label = "source"
+    replacement  = "macos-host"
+  }
+}
+
+prometheus.scrape "macosserver" {
+  targets         = discovery.relabel.macosserver.output
+  job_name        = "integrations/macos_host"
+  scrape_interval = "60s"
+  forward_to      = [prometheus.remote_write.grafana.receiver]
+}
+
+prometheus.scrape "cloudflared" {
+  targets = [{
+    "__address__" = "127.0.0.1:20241",
+  }]
+  job_name        = "integrations/cloudflared"
+  scrape_interval = "60s"
+  forward_to      = [prometheus.remote_write.grafana.receiver]
+}
+
+
+prometheus.remote_write "grafana" {
+  endpoint {
+    url = sys.env("GRAFANA_CLOUD_REMOTE_WRITE_URL")
+
+    basic_auth {
+      username = sys.env("GRAFANA_CLOUD_USER")
+      password = sys.env("GRAFANA_CLOUD_TOKEN")
+    }
+  }
+
+  external_labels = {
+    "cluster" = "macosserver-cluster",
+    "host"    = "macosserver",
+    "source"  = "macos-host",
+  }
+}

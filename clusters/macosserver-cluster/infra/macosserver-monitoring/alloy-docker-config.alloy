@@ -1,0 +1,46 @@
+// Docker Desktop container metrics. This file runs in a Linux Alloy container
+// because Docker Desktop's engine runs inside its Linux VM.
+
+prometheus.exporter.cadvisor "docker" {
+  docker_host      = "unix:///var/run/docker.sock"
+  docker_only      = true
+  storage_duration = "5m"
+}
+
+discovery.relabel "docker" {
+  targets = prometheus.exporter.cadvisor.docker.targets
+
+  rule {
+    target_label = "instance"
+    replacement  = "macosserver"
+  }
+
+  rule {
+    target_label = "source"
+    replacement  = "docker-desktop"
+  }
+}
+
+prometheus.scrape "docker" {
+  targets         = discovery.relabel.docker.output
+  job_name        = "integrations/docker"
+  scrape_interval = "60s"
+  forward_to      = [prometheus.remote_write.grafana.receiver]
+}
+
+prometheus.remote_write "grafana" {
+  endpoint {
+    url = sys.env("GRAFANA_CLOUD_REMOTE_WRITE_URL")
+
+    basic_auth {
+      username = sys.env("GRAFANA_CLOUD_USER")
+      password = sys.env("GRAFANA_CLOUD_TOKEN")
+    }
+  }
+
+  external_labels = {
+    "cluster" = "macosserver-cluster",
+    "host"    = "macosserver",
+    "source"  = "docker-desktop",
+  }
+}

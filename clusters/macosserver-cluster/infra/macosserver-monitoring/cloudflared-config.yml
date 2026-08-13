@@ -1,0 +1,11 @@
+tunnel: 0412b841-0052-4cd7-b9f2-5ef6fe1954c4
+credentials-file: /Users/agolovko/.cloudflared/0412b841-0052-4cd7-b9f2-5ef6fe1954c4.json
+
+ingress:
+  - hostname: n8n.agolovko.net
+    service: http://localhost:5678
+  - hostname: home-assistant.agolovko.net
+    service: http://localhost:8123
+  - hostname: schnapper.agolovko.net
+    service: http://localhost:18080
+  - service: http_status:404
