@@ -11,7 +11,12 @@ set -a
 . "$ENV_FILE"
 set +a
 
-exec /usr/local/bin/alloy run \
+ALLOY_BIN="${ALLOY_BIN:-/opt/homebrew/bin/alloy}"
+if [ ! -x "$ALLOY_BIN" ]; then
+  ALLOY_BIN="/usr/local/bin/alloy"
+fi
+
+exec "$ALLOY_BIN" run \
   --server.http.listen-addr=127.0.0.1:12346 \
   --storage.path="$HOME/.local/share/grafana-alloy" \
   /Users/agolovko/.config/grafana/alloy-host-config.alloy
