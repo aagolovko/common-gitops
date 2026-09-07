@@ -103,6 +103,7 @@
       "fieldConfig": {"defaults": {"unit": "short"}, "overrides": [{"matcher": {"id": "byName", "options": "Age"}, "properties": [{"id": "unit", "value": "dtdurations"}]}]},
       "transformations": [
         {"id": "joinByField", "options": {"byField": "container_name", "mode": "outer"}},
+        {"id": "filterFieldsByName", "options": {"include": "^(container_name|Value #B|Value #A|Value #C|Value #D)$"}},
         {"id": "organize", "options": {"excludeByName": {"Time": true, "container_id": true, "instance": true, "job": true, "source": true, "__name__": true}, "indexByName": {"container_name": 0, "Value #B": 1, "Value #A": 2, "Value #C": 3, "Value #D": 4}, "renameByName": {"container_name": "Container", "Value #B": "Age", "Value #A": "Running", "Value #C": "CPU usage", "Value #D": "Memory usage"}}}
       ],
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Container", "desc": false}]}
