@@ -52,8 +52,8 @@
       "id": 9,
       "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "max(fritz_external_ip_info)", "legendFormat": "{{ip}}"}],
-      "fieldConfig": {"defaults": {"mappings": [{"type": "value", "options": {"1": {"text": "{{ip}}", "color": "blue"}}}], "unit": "short"}, "overrides": []},
+      "targets": [{"refId": "A", "expr": "max by (ip) (fritz_external_ip_info)", "legendFormat": "{{ip}}"}],
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "value", "graphMode": "none", "textMode": "name"}
     },
     {
