@@ -11,9 +11,9 @@
       "id": 1,
       "gridPos": {"h": 5, "w": 6, "x": 0, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "fritz_device_reachable", "legendFormat": "{{friendly_name}}"}],
+      "targets": [{"refId": "A", "expr": "max(fritz_device_reachable)", "legendFormat": ""}],
       "fieldConfig": {"defaults": {"mappings": [{"type": "value", "options": {"0": {"text": "Offline", "color": "red"}, "1": {"text": "Online", "color": "green"}}}], "thresholds": {"mode": "absolute", "steps": [{"color": "red", "value": null}, {"color": "green", "value": 1}]}, "unit": "short"}, "overrides": []},
-      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "colorMode": "background", "graphMode": "none", "justifyMode": "center", "textMode": "auto"}
+      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "orientation": "auto", "colorMode": "background", "graphMode": "none", "justifyMode": "center", "textMode": "value"}
     },
     {
       "type": "table",
@@ -23,7 +23,8 @@
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [{"refId": "A", "expr": "fritz_host_active == 1", "format": "table", "instant": true, "legendFormat": "{{hostname}} ({{ip_address}})"}],
       "fieldConfig": {"defaults": {}, "overrides": []},
-      "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "hostname", "desc": false}]}
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true, "friendly_name": true, "interface": true, "mac_address": true, "port": true, "serial": true}, "indexByName": {"hostname": 0, "ip_address": 1, "model": 2}, "renameByName": {"hostname": "Hostname", "ip_address": "IP address", "model": "Model"}}}],
+      "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Hostname", "desc": false}]}
     },
     {
       "type": "stat",
