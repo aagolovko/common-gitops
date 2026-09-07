@@ -1,7 +1,7 @@
-// Native macOS host metrics for macosserver.
+// Native macOS host and Fritz!Box metrics. Host identity is supplied by the installer.
 // Credentials are supplied through the launchd wrapper environment.
 
-prometheus.exporter.unix "macosserver" {
+prometheus.exporter.unix "host" {
   enable_collectors = [
     "boottime",
     "cpu",
@@ -14,27 +14,27 @@ prometheus.exporter.unix "macosserver" {
     "textfile",
   ]
   textfile {
-    directory = "/Users/agolovko/.local/share/grafana-alloy"
+    directory = sys.env("ALLOY_TEXTFILE_DIRECTORY")
   }
 }
 
-discovery.relabel "macosserver" {
-  targets = prometheus.exporter.unix.macosserver.targets
+discovery.relabel "host" {
+  targets = prometheus.exporter.unix.host.targets
 
   rule {
     target_label = "instance"
-    replacement  = "macosserver"
+    replacement  = sys.env("ALLOY_HOST_NAME")
   }
 
   rule {
     target_label = "source"
-    replacement  = "macos-host"
+    replacement  = "host"
   }
 }
 
-prometheus.scrape "macosserver" {
-  targets         = discovery.relabel.macosserver.output
-  job_name        = "integrations/macos_host"
+prometheus.scrape "host" {
+  targets         = discovery.relabel.host.output
+  job_name        = "integrations/host"
   scrape_interval = "60s"
   forward_to      = [prometheus.remote_write.grafana.receiver]
 }
@@ -70,8 +70,8 @@ prometheus.remote_write "grafana" {
   }
 
   external_labels = {
-    "cluster" = "macosserver-cluster",
-    "host"    = "macosserver",
-    "source"  = "macos-host",
+    "cluster" = sys.env("ALLOY_CLUSTER_NAME"),
+    "host"    = sys.env("ALLOY_HOST_NAME"),
+    "source"  = "host",
   }
 }

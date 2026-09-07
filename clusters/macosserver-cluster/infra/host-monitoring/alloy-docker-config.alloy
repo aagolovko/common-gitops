@@ -12,7 +12,7 @@ discovery.relabel "docker" {
 
   rule {
     target_label = "instance"
-    replacement  = "macosserver"
+    replacement  = sys.env("ALLOY_HOST_NAME")
   }
 
   rule {
@@ -39,8 +39,8 @@ prometheus.remote_write "grafana" {
   }
 
   external_labels = {
-    "cluster" = "macosserver-cluster",
-    "host"    = "macosserver",
+    "cluster" = sys.env("ALLOY_CLUSTER_NAME"),
+    "host"    = sys.env("ALLOY_HOST_NAME"),
     "source"  = "docker-desktop",
   }
 }

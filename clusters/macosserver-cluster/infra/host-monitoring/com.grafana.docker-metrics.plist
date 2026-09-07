@@ -6,7 +6,7 @@
   <string>com.grafana.docker-metrics</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/Users/agolovko/.config/grafana/docker-metrics-launcher.sh</string>
+    <string>__HOME__/.config/grafana/docker-metrics-launcher.sh</string>
   </array>
   <key>StartInterval</key>
   <integer>60</integer>
