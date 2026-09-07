@@ -32,7 +32,7 @@
       "gridPos": {"h": 5, "w": 6, "x": 12, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [{"refId": "A", "expr": "sum(docker_container_memory_usage_bytes{container_name=~\"$container\"})", "legendFormat": ""}],
-      "fieldConfig": {"defaults": {"unit": "bytes(IEC)", "decimals": 1}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "decmbytes", "decimals": 1}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "value", "graphMode": "area", "textMode": "value"}
     },
     {
@@ -49,7 +49,7 @@
       "type": "timeseries",
       "title": "CPU by container",
       "id": 5,
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 5},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 14},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [{"refId": "A", "expr": "docker_container_cpu_percent{container_name=~\"$container\"}", "legendFormat": "{{container_name}}"}],
       "fieldConfig": {"defaults": {"unit": "percent", "decimals": 1, "custom": {"fillOpacity": 15, "lineWidth": 2, "showPoints": "never"}}, "overrides": []},
@@ -59,17 +59,17 @@
       "type": "timeseries",
       "title": "Memory by container",
       "id": 6,
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 5},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 14},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [{"refId": "A", "expr": "docker_container_memory_usage_bytes{container_name=~\"$container\"}", "legendFormat": "{{container_name}}"}],
-      "fieldConfig": {"defaults": {"unit": "bytes(IEC)", "custom": {"fillOpacity": 15, "lineWidth": 2, "showPoints": "never"}}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "decmbytes", "custom": {"fillOpacity": 15, "lineWidth": 2, "showPoints": "never"}}, "overrides": []},
       "options": {"legend": {"displayMode": "table", "placement": "right", "calcs": ["lastNotNull", "max"]}, "tooltip": {"mode": "multi", "sort": "desc"}}
     },
     {
       "type": "timeseries",
       "title": "Network traffic by container",
       "id": 7,
-      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 13},
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 22},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [
         {"refId": "A", "expr": "rate(docker_container_network_receive_bytes_total{container_name=~\"$container\"}[$__rate_interval])", "legendFormat": "{{container_name}} received"},
@@ -82,7 +82,7 @@
       "type": "timeseries",
       "title": "Container memory percentage",
       "id": 8,
-      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 13},
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 22},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [{"refId": "A", "expr": "docker_container_memory_percent{container_name=~\"$container\"}", "legendFormat": "{{container_name}}"}],
       "fieldConfig": {"defaults": {"unit": "percent", "decimals": 1, "custom": {"fillOpacity": 15, "lineWidth": 2, "showPoints": "never"}}, "overrides": []},
@@ -92,16 +92,18 @@
       "type": "table",
       "title": "Container state and age",
       "id": 9,
-      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 21},
+      "gridPos": {"h": 9, "w": 24, "x": 0, "y": 5},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
       "targets": [
         {"refId": "A", "expr": "docker_container_up{container_name=~\"$container\"}", "format": "table", "instant": true, "legendFormat": ""},
-        {"refId": "B", "expr": "(time() - docker_container_created_seconds{container_name=~\"$container\"}) / 86400", "format": "table", "instant": true, "legendFormat": ""}
+        {"refId": "B", "expr": "time() - docker_container_created_seconds{container_name=~\"$container\"}", "format": "table", "instant": true, "legendFormat": ""},
+        {"refId": "C", "expr": "docker_container_cpu_percent{container_name=~\"$container\"}", "format": "table", "instant": true, "legendFormat": ""},
+        {"refId": "D", "expr": "docker_container_memory_usage_bytes{container_name=~\"$container\"}", "format": "table", "instant": true, "legendFormat": ""}
       ],
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
+      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": [{"matcher": {"id": "byName", "options": "Age"}, "properties": [{"id": "unit", "value": "dtdurations"}]}]},
       "transformations": [
         {"id": "joinByField", "options": {"byField": "container_name", "mode": "outer"}},
-        {"id": "organize", "options": {"excludeByName": {"Time": true, "container_id": true}, "indexByName": {"container_name": 0, "Value #A": 1, "Value #B": 2}, "renameByName": {"container_name": "Container", "Value #A": "Running", "Value #B": "Age (days)"}}}
+        {"id": "organize", "options": {"excludeByName": {"Time": true, "container_id": true, "instance": true, "job": true, "source": true, "__name__": true}, "indexByName": {"container_name": 0, "Value #B": 1, "Value #A": 2, "Value #C": 3, "Value #D": 4}, "renameByName": {"container_name": "Container", "Value #B": "Age", "Value #A": "Running", "Value #C": "CPU usage", "Value #D": "Memory usage"}}}
       ],
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Container", "desc": false}]}
     }
