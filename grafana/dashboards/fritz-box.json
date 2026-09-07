@@ -21,7 +21,7 @@
       "id": 2,
       "gridPos": {"h": 10, "w": 24, "x": 0, "y": 5},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "fritz_host_active == 1", "format": "table", "instant": true, "legendFormat": "{{hostname}} ({{ip_address}})"}],
+      "targets": [{"refId": "A", "expr": "sum by (hostname, ip_address, model) (fritz_host_active == 1)", "format": "table", "instant": true, "legendFormat": ""}],
       "fieldConfig": {"defaults": {}, "overrides": []},
       "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true, "friendly_name": true, "interface": true, "mac_address": true, "port": true, "serial": true}, "indexByName": {"hostname": 0, "ip_address": 1, "model": 2}, "renameByName": {"hostname": "Hostname", "ip_address": "IP address", "model": "Model"}}}],
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Hostname", "desc": false}]}
@@ -32,7 +32,7 @@
       "id": 3,
       "gridPos": {"h": 5, "w": 6, "x": 6, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "fritz_uptime_seconds_total", "legendFormat": "{{modelname}}"}],
+      "targets": [{"refId": "A", "expr": "max(fritz_uptime_seconds_total)", "legendFormat": ""}],
       "fieldConfig": {"defaults": {"unit": "dtdurations"}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "value", "graphMode": "none", "textMode": "auto"}
     },
@@ -42,7 +42,7 @@
       "id": 4,
       "gridPos": {"h": 5, "w": 6, "x": 12, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "fritz_update_available", "legendFormat": "{{friendly_name}}"}],
+      "targets": [{"refId": "A", "expr": "max(fritz_update_available)", "legendFormat": ""}],
       "fieldConfig": {"defaults": {"mappings": [{"type": "value", "options": {"0": {"text": "No", "color": "green"}, "1": {"text": "Yes", "color": "orange"}}}], "unit": "short"}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "background", "graphMode": "none", "textMode": "auto"}
     },
@@ -52,7 +52,7 @@
       "id": 9,
       "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "fritz_external_ip_info", "legendFormat": "{{ip}}"}],
+      "targets": [{"refId": "A", "expr": "max(fritz_external_ip_info)", "legendFormat": "{{ip}}"}],
       "fieldConfig": {"defaults": {"mappings": [{"type": "value", "options": {"1": {"text": "{{ip}}", "color": "blue"}}}], "unit": "short"}, "overrides": []},
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "value", "graphMode": "none", "textMode": "name"}
     },
