@@ -29,26 +29,12 @@ record:
       days: 10
       mode: active_objects
 
+go2rtc:
+  streams:
+    cam_2:
+      - "ffmpeg:http://192.168.178.154:8080/video#video=h264"
+
 cameras:
-  cam_1:
-    enabled: true
-    friendly_name: Cam 1
-    ffmpeg:
-      inputs:
-        - path: http://192.168.178.102:8080/video
-          input_args: preset-http-mjpeg-generic
-          roles:
-            - detect
-            - record
-    detect:
-      width: 1280
-      height: 720
-      fps: 5
-    record:
-      enabled: true
-    live:
-      streams:
-        Stream 1: http://192.168.178.102:8080/video
   cam_2:
     enabled: true
     friendly_name: Cam 2
@@ -67,6 +53,6 @@ cameras:
       enabled: true
     live:
       streams:
-        Stream 1: http://192.168.178.154:8080/video
+        Stream 1: cam_2
 
 version: 0.17-0
