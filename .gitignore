@@ -1,0 +1,10 @@
+.DS_Store
+
+# Frigate writes recordings and runtime state here.
+clusters/macosserver-cluster/infra/m2host-services/frigate/media/*
+!clusters/macosserver-cluster/infra/m2host-services/frigate/media/.gitkeep
+
+# Frigate generates secrets, databases, and runtime metadata in /config.
+clusters/macosserver-cluster/infra/m2host-services/frigate/config/*
+!clusters/macosserver-cluster/infra/m2host-services/frigate/config/config.yaml
+!clusters/macosserver-cluster/infra/m2host-services/frigate/config/.gitkeep

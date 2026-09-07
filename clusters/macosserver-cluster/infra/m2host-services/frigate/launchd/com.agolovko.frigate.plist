@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.agolovko.frigate</string>
+
+  <key>RunAtLoad</key>
+  <true/>
+  <key>WorkingDirectory</key>
+  <string>/Users/agolovko/wsAgoFm/common-gitops/clusters/macosserver-cluster/infra/m2host-services/frigate</string>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <key>PATH</key>
+    <string>/Applications/Docker.app/Contents/Resources/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+  </dict>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Applications/Docker.app/Contents/Resources/bin/docker</string>
+    <string>compose</string>
+    <string>up</string>
+  </array>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/frigate-launchd.out.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/tmp/frigate-launchd.err.log</string>
+</dict>
+</plist>

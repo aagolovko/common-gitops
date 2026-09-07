@@ -2,6 +2,10 @@
 
 Shared GitOps declarations for infrastructure that is not owned by a single application.
 
+Local services for the m2host are grouped under `clusters/macosserver-cluster/infra/m2host-services`.
+The host-monitoring and Frigate Compose stacks remain independent so either one can be restarted
+without affecting the other.
+
 This repository owns common `macosserver` cluster resources such as:
 
 - the shared Cloudflare tunnel runner
@@ -31,3 +35,16 @@ Routes for shared hostnames live in:
 clusters/macosserver-cluster/infra/cloudflared/configmap.yaml
 ```
 
+## m2host Services
+
+The local host services are organized as:
+
+```text
+clusters/macosserver-cluster/infra/m2host-services/
+  host-monitoring/
+  frigate/
+```
+
+Run each stack from its own directory with `docker compose up -d`. Frigate stores its
+configuration in `frigate/config` and recordings in `frigate/media`; the media directory is
+intentionally excluded from Git.

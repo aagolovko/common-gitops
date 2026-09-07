@@ -1,0 +1,17 @@
+services:
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable@sha256:06e48c72f5af2887eafff09a4c53e8df9238827ae9e8df811cbdeaab1c7a4330
+    container_name: frigate
+    restart: unless-stopped
+    shm_size: "256mb"
+    ports:
+      - "5001:5000"
+      - "8554:8554"
+      - "8555:8555/tcp"
+      - "8555:8555/udp"
+    environment:
+      TZ: Europe/Berlin
+    volumes:
+      - ./config:/config
+      - ./media:/media/frigate
+      - /etc/localtime:/etc/localtime:ro
