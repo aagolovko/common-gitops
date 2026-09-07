@@ -27,7 +27,7 @@
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Hostname", "desc": false}]}
     },
     {
-      "type": "table",
+      "type": "stat",
       "title": "Router uptime",
       "id": 3,
       "gridPos": {"h": 5, "w": 6, "x": 6, "y": 0},
@@ -47,12 +47,12 @@
       "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "background", "graphMode": "none", "textMode": "auto"}
     },
     {
-      "type": "stat",
+      "type": "table",
       "title": "Router public IP",
       "id": 9,
       "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "max by (ip) (fritz_external_ip_info)", "format": "table", "instant": true, "legendFormat": ""}],
+      "targets": [{"refId": "A", "expr": "max by (ip) (fritz_external_ip_info{ip!=\"\"})", "format": "table", "instant": true, "legendFormat": ""}],
       "fieldConfig": {"defaults": {}, "overrides": []},
       "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true}, "indexByName": {"ip": 0}, "renameByName": {"ip": "Public IP"}}}],
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}}
