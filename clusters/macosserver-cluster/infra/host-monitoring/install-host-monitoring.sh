@@ -49,6 +49,7 @@ chmod 700 "$config_dir/alloy-host-launcher.sh"
 
 cp "$repo_dir/docker-metrics.py" "$config_dir/docker-metrics.py"
 cp "$repo_dir/cloudflare-health.py" "$config_dir/cloudflare-health.py"
+cp "$repo_dir/fritz-public-ip.py" "$config_dir/fritz-public-ip.py"
 sed -i '' "s#__HOME__#${HOME}#g" "$config_dir/docker-metrics.py" "$config_dir/cloudflare-health.py"
 cat > "$config_dir/docker-metrics-launcher.sh" <<'EOF'
 #!/bin/sh
@@ -61,6 +62,12 @@ set -eu
 exec /usr/bin/python3 "$HOME/.config/grafana/cloudflare-health.py"
 EOF
 chmod 700 "$config_dir/docker-metrics-launcher.sh" "$config_dir/cloudflare-health-launcher.sh"
+cat > "$config_dir/fritz-public-ip-launcher.sh" <<'EOF'
+#!/bin/sh
+set -eu
+exec /usr/bin/python3 "$HOME/.config/grafana/fritz-public-ip.py"
+EOF
+chmod 700 "$config_dir/fritz-public-ip-launcher.sh"
 
 cat > "$HOME/Library/LaunchAgents/com.grafana.alloy-host.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -87,9 +94,11 @@ for service in com.grafana.docker-metrics com.grafana.cloudflare-health; do
 done
 cp "$repo_dir/com.grafana.docker-metrics.plist" "$HOME/Library/LaunchAgents/com.grafana.docker-metrics.plist"
 cp "$repo_dir/com.grafana.cloudflare-health.plist" "$HOME/Library/LaunchAgents/com.grafana.cloudflare-health.plist"
-sed -i '' "s#__HOME__#${HOME}#g" "$HOME/Library/LaunchAgents/com.grafana.docker-metrics.plist" "$HOME/Library/LaunchAgents/com.grafana.cloudflare-health.plist"
+cp "$repo_dir/com.grafana.fritz-public-ip.plist" "$HOME/Library/LaunchAgents/com.grafana.fritz-public-ip.plist"
+sed -i '' "s#__HOME__#${HOME}#g" "$HOME/Library/LaunchAgents/com.grafana.docker-metrics.plist" "$HOME/Library/LaunchAgents/com.grafana.cloudflare-health.plist" "$HOME/Library/LaunchAgents/com.grafana.fritz-public-ip.plist"
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.grafana.docker-metrics.plist"
 launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.grafana.cloudflare-health.plist"
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/com.grafana.fritz-public-ip.plist"
 
 # Migrate the legacy fixed-name exporter into the renamed Compose project.
 if docker inspect fritz-exporter >/dev/null 2>&1; then
