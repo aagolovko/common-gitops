@@ -1,0 +1,3 @@
+[submodule "clusters/macosserver-cluster/infra/m2host-services/frigate/faceid"]
+	path = clusters/macosserver-cluster/infra/m2host-services/frigate/faceid
+	url = https://github.com/SkyTechNerds/faceid.git

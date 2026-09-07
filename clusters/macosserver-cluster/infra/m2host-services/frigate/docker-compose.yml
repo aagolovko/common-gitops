@@ -1,4 +1,21 @@
 services:
+  mosquitto:
+    image: eclipse-mosquitto:2.0.22
+    container_name: frigate-mosquitto
+    restart: unless-stopped
+    environment:
+      MQTT_PASSWORD: ${MQTT_PASSWORD:?Set MQTT_PASSWORD in .env}
+    volumes:
+      - ./mosquitto/config:/mosquitto/config:ro
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    healthcheck:
+      test: ["CMD-SHELL", "mosquitto_sub -h 127.0.0.1 -p 1883 -u frigate -P \"$$MQTT_PASSWORD\" -t '$$SYS/broker/uptime' -C 1 -W 5 >/dev/null"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
   frigate:
     image: ghcr.io/blakeblackshear/frigate:stable@sha256:c707dfa94a2efc9e994165cc7968517ebc02edd5b391789e20f6ace006bf29e3
     container_name: frigate
@@ -11,7 +28,42 @@ services:
       - "8555:8555/udp"
     environment:
       TZ: Europe/Berlin
+      FRIGATE_MQTT_HOST: mosquitto
+      FRIGATE_MQTT_USER: frigate
+      FRIGATE_MQTT_PASSWORD: ${MQTT_PASSWORD:?Set MQTT_PASSWORD in .env}
     volumes:
       - ./config:/config
       - ./media:/media/frigate
       - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+
+  faceid:
+    build:
+      context: ./faceid
+    container_name: faceid
+    restart: unless-stopped
+    cpus: 2.0
+    environment:
+      MQTT_PASSWORD: ${MQTT_PASSWORD:?Set MQTT_PASSWORD in .env}
+      FRIGATE_FACEID_PASSWORD: ${FRIGATE_FACEID_PASSWORD:?Set FRIGATE_FACEID_PASSWORD in .env}
+    entrypoint:
+      - /bin/sh
+      - -ec
+      - |
+        sed \
+          -e "s|REPLACE_WITH_MQTT_PASSWORD|$$MQTT_PASSWORD|g" \
+          -e "s|REPLACE_WITH_FRIGATE_FACEID_PASSWORD|$$FRIGATE_FACEID_PASSWORD|g" \
+          /opt/faceid/config.template.yaml > /opt/faceid/config.yaml
+        exec python -m app.main
+    ports:
+      - "127.0.0.1:8600:8600"
+    volumes:
+      - ./faceid-runtime/config.template.yaml:/opt/faceid/config.template.yaml:ro
+      - ./faceid-runtime/data:/opt/faceid/data
+    depends_on:
+      mosquitto:
+        condition: service_healthy
+      frigate:
+        condition: service_started

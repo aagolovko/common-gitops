@@ -8,3 +8,13 @@ clusters/macosserver-cluster/infra/m2host-services/frigate/media/*
 clusters/macosserver-cluster/infra/m2host-services/frigate/config/*
 !clusters/macosserver-cluster/infra/m2host-services/frigate/config/config.yaml
 !clusters/macosserver-cluster/infra/m2host-services/frigate/config/.gitkeep
+
+# FaceID's gallery, downloaded model, and credentials are local-only.
+clusters/macosserver-cluster/infra/m2host-services/frigate/faceid-runtime/data/*
+!clusters/macosserver-cluster/infra/m2host-services/frigate/faceid-runtime/data/.gitkeep
+clusters/macosserver-cluster/infra/m2host-services/frigate/.env
+clusters/macosserver-cluster/infra/m2host-services/frigate/mosquitto/config/passwd
+clusters/macosserver-cluster/infra/m2host-services/frigate/mosquitto/data/*
+!clusters/macosserver-cluster/infra/m2host-services/frigate/mosquitto/data/.gitkeep
+clusters/macosserver-cluster/infra/m2host-services/frigate/mosquitto/log/*
+!clusters/macosserver-cluster/infra/m2host-services/frigate/mosquitto/log/.gitkeep

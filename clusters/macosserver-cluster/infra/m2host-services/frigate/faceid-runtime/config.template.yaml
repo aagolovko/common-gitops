@@ -1,0 +1,26 @@
+# The FaceID container replaces REPLACE_WITH_MQTT_PASSWORD at startup from .env.
+frigate:
+  url: https://frigate:8971
+  user: faceid
+  password: REPLACE_WITH_FRIGATE_FACEID_PASSWORD
+  verify_tls: false
+
+mqtt:
+  host: mosquitto
+  port: 1883
+  user: frigate
+  password: REPLACE_WITH_MQTT_PASSWORD
+
+faceid:
+  port: 8600
+  mqtt_prefix: faceid
+  frigate_topic_prefix: frigate
+  cameras:
+    - cam_2
+  discovery_cameras: []
+  set_sub_label: true
+  clip_fallback: false
+  live_hires_fallback: false
+  auth:
+    user: ""
+    password: ""
