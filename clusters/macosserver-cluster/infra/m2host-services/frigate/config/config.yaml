@@ -38,7 +38,7 @@ record:
 go2rtc:
   streams:
     cam_2:
-      - "ffmpeg:http://192.168.178.154:8080/video#video=h264"
+      - "rtsp://192.168.178.154:8080/h264.sdp"
 
 cameras:
   cam_2:
