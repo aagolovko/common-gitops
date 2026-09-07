@@ -1,0 +1,36 @@
+name: Provision Grafana dashboards
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "grafana/dashboards/**"
+      - ".github/workflows/provision-grafana-dashboards.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out dashboards
+        uses: actions/checkout@v4
+
+      - name: Provision dashboards in Grafana Cloud
+        env:
+          GRAFANA_URL: https://aagolovko.grafana.net
+          GRAFANA_TOKEN: ${{ secrets.GRAFANA_COMMON_GITOPS_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GRAFANA_TOKEN"
+          dashboard=$(jq -c '.' grafana/dashboards/fritz-box.json)
+          payload=$(jq -cn --argjson dashboard "$dashboard" \
+            '{dashboard: $dashboard, folderUid: "", overwrite: true, message: "Provisioned from common-gitops"}')
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $GRAFANA_TOKEN" \
+            --header "Content-Type: application/json" \
+            --data "$payload" \
+            "$GRAFANA_URL/api/dashboards/db"
