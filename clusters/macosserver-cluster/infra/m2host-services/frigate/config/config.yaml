@@ -14,7 +14,7 @@ objects:
     - cat
 
 ffmpeg:
-  path: "7.0"
+  path: '7.0'
 
 record:
   enabled: true
@@ -38,7 +38,7 @@ record:
 go2rtc:
   streams:
     cam_2:
-      - "rtsp://192.168.178.154:8080/h264.sdp"
+      - rtsp://192.168.178.154:8080/h264.sdp
 
 cameras:
   cam_2:
@@ -63,3 +63,14 @@ cameras:
         Stream 1: cam_2
 
 version: 0.17-0
+semantic_search:
+  enabled: false
+  model_size: small
+face_recognition:
+  enabled: true
+  model_size: small
+lpr:
+  enabled: true
+classification:
+  bird:
+    enabled: false
