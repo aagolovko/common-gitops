@@ -61,6 +61,8 @@ cameras:
       fps: 5
     record:
       enabled: true
+    snapshots:
+      enabled: true
     live:
       streams:
         Stream 1: cam_2
