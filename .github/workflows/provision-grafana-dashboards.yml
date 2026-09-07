@@ -25,12 +25,14 @@ jobs:
         run: |
           set -euo pipefail
           test -n "$GRAFANA_TOKEN"
-          dashboard=$(jq -c '.' grafana/dashboards/fritz-box.json)
-          payload=$(jq -cn --argjson dashboard "$dashboard" \
-            '{dashboard: $dashboard, folderUid: "", overwrite: true, message: "Provisioned from common-gitops"}')
-          curl --fail-with-body --silent --show-error \
-            --request POST \
-            --header "Authorization: Bearer $GRAFANA_TOKEN" \
-            --header "Content-Type: application/json" \
-            --data "$payload" \
-            "$GRAFANA_URL/api/dashboards/db"
+          for dashboard_file in grafana/dashboards/*.json; do
+            dashboard=$(jq -c '.' "$dashboard_file")
+            payload=$(jq -cn --argjson dashboard "$dashboard" --arg file "$dashboard_file" \
+              '{dashboard: $dashboard, folderUid: "", overwrite: true, message: ("Provisioned " + $file + " from common-gitops")}')
+            curl --fail-with-body --silent --show-error \
+              --request POST \
+              --header "Authorization: Bearer $GRAFANA_TOKEN" \
+              --header "Content-Type: application/json" \
+              --data "$payload" \
+              "$GRAFANA_URL/api/dashboards/db"
+          done
