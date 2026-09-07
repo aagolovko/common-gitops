@@ -21,13 +21,13 @@
       "id": 2,
       "gridPos": {"h": 10, "w": 24, "x": 0, "y": 5},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "sum by (hostname, ip_address, model) (fritz_host_active == 1)", "format": "table", "instant": true, "legendFormat": ""}],
+      "targets": [{"refId": "A", "expr": "max by (hostname, ip_address, model) (fritz_host_speed) and on (hostname, ip_address, model) (max by (hostname, ip_address, model) (fritz_host_active) == 1)", "format": "table", "instant": true, "legendFormat": ""}],
       "fieldConfig": {"defaults": {}, "overrides": []},
-      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true, "friendly_name": true, "interface": true, "mac_address": true, "port": true, "serial": true}, "indexByName": {"hostname": 0, "ip_address": 1, "model": 2}, "renameByName": {"hostname": "Hostname", "ip_address": "IP address", "model": "Model"}}}],
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "friendly_name": true, "interface": true, "mac_address": true, "port": true, "serial": true}, "indexByName": {"hostname": 0, "ip_address": 1, "model": 2, "Value": 3}, "renameByName": {"hostname": "Hostname", "ip_address": "IP address", "model": "Model", "Value": "Throughput (Mbit/s)"}}}],
       "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}, "sortBy": [{"displayName": "Hostname", "desc": false}]}
     },
     {
-      "type": "stat",
+      "type": "table",
       "title": "Router uptime",
       "id": 3,
       "gridPos": {"h": 5, "w": 6, "x": 6, "y": 0},
@@ -52,9 +52,10 @@
       "id": 9,
       "gridPos": {"h": 5, "w": 6, "x": 18, "y": 0},
       "datasource": {"type": "prometheus", "uid": "grafanacloud-prom"},
-      "targets": [{"refId": "A", "expr": "max by (ip) (fritz_external_ip_info)", "legendFormat": "{{ip}}"}],
-      "fieldConfig": {"defaults": {"unit": "short"}, "overrides": []},
-      "options": {"reduceOptions": {"calcs": ["lastNotNull"], "fields": "", "values": false}, "colorMode": "value", "graphMode": "none", "textMode": "name"}
+      "targets": [{"refId": "A", "expr": "max by (ip) (fritz_external_ip_info)", "format": "table", "instant": true, "legendFormat": ""}],
+      "fieldConfig": {"defaults": {}, "overrides": []},
+      "transformations": [{"id": "organize", "options": {"excludeByName": {"Time": true, "Value": true}, "indexByName": {"ip": 0}, "renameByName": {"ip": "Public IP"}}}],
+      "options": {"showHeader": true, "cellHeight": "sm", "footer": {"show": false}}
     },
     {
       "type": "timeseries",
