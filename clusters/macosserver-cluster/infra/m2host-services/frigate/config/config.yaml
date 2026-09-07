@@ -1,6 +1,9 @@
 mqtt:
   enabled: false
 
+auth:
+  enabled: true
+
 objects:
   track:
     - person
@@ -10,24 +13,27 @@ objects:
     - dog
     - cat
 
+ffmpeg:
+  path: "7.0"
+
 record:
   enabled: true
   continuous:
     days: 0
   motion:
-    days: 0
+    days: 3
   alerts:
     pre_capture: 5
     post_capture: 5
     retain:
-      days: 10
-      mode: active_objects
+      days: 3
+      mode: motion
   detections:
     pre_capture: 5
     post_capture: 5
     retain:
-      days: 10
-      mode: active_objects
+      days: 3
+      mode: motion
 
 go2rtc:
   streams:
@@ -40,12 +46,13 @@ cameras:
     friendly_name: Cam 2
     ffmpeg:
       inputs:
-        - path: http://192.168.178.154:8080/video
-          input_args: preset-http-mjpeg-generic
+        - path: rtsp://127.0.0.1:8554/cam_2
+          input_args: preset-rtsp-restream
           roles:
             - detect
             - record
     detect:
+      enabled: true
       width: 1280
       height: 720
       fps: 5

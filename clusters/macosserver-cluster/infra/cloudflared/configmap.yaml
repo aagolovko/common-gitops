@@ -21,5 +21,7 @@ data:
       - hostname: poicrafter.agolovko.net
         service: http://poicrafter-backend.poicrafter-prod.svc.cluster.local:80
       - hostname: frigate.agolovko.net
-        service: http://host.docker.internal:5001
+        service: https://host.docker.internal:8971
+        originRequest:
+          noTLSVerify: true
       - service: http_status:404
