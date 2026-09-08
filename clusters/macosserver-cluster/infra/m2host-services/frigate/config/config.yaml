@@ -1,8 +1,8 @@
 mqtt:
   enabled: true
-  host: "{FRIGATE_MQTT_HOST}"
-  user: "{FRIGATE_MQTT_USER}"
-  password: "{FRIGATE_MQTT_PASSWORD}"
+  host: '{FRIGATE_MQTT_HOST}'
+  user: '{FRIGATE_MQTT_USER}'
+  password: '{FRIGATE_MQTT_PASSWORD}'
 
 auth:
   enabled: true
@@ -67,6 +67,10 @@ cameras:
       streams:
         Stream 1: cam_2
 
+    motion:
+      threshold: 30
+      contour_area: 10
+      improve_contrast: true
 version: 0.17-0
 semantic_search:
   enabled: false

@@ -19,7 +19,7 @@ faceid:
     - cam_2
   discovery_cameras: []
   set_sub_label: true
-  clip_fallback: false
+  clip_fallback: true
   live_hires_fallback: false
   auth:
     user: ""
