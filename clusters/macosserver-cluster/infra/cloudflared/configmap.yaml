@@ -24,4 +24,6 @@ data:
         service: https://host.docker.internal:8971
         originRequest:
           noTLSVerify: true
+      - hostname: litellm.agolovko.net
+        service: http://host.docker.internal:4000
       - service: http_status:404
